@@ -1,0 +1,20 @@
+12:19:48 **** Incremental Build of configuration Debug for project test_adc_and_lm35_by_intterupt ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 test_adc_and_lm35_by_intterupt.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   11734 bytes (35.8% Full)
+(.text + .data + .bootloader)
+
+Data:        278 bytes (13.6% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+12:19:49 Build Finished. 0 errors, 0 warnings. (took 269ms)
+

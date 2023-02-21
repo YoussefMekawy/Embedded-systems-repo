@@ -1,0 +1,31 @@
+16:19:40 **** Incremental Build of configuration Debug for project DC_motor ****
+make all 
+Building file: ../dc_motor.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=1000000UL -MMD -MP -MF"dc_motor.d" -MT"dc_motor.o" -c -o "dc_motor.o" "../dc_motor.c"
+Finished building: ../dc_motor.c
+ 
+Building target: DC_motor.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,DC_motor.map -mmcu=atmega32 -o "DC_motor.elf"  ./adc.o ./dc_motor.o ./gpio.o ./lcd.o ./lm35.o ./main.o   
+Finished building target: DC_motor.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S DC_motor.elf  >"DC_motor.lss"
+Finished building: DC_motor.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 DC_motor.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   11602 bytes (35.4% Full)
+(.text + .data + .bootloader)
+
+Data:        264 bytes (12.9% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

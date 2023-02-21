@@ -1,0 +1,60 @@
+/*
+ * adc_types.h
+ *
+ *  Created on: 4 Oct 2022
+ *      Author: hp
+ */
+
+#ifndef ADC_TYPES_H_
+#define ADC_TYPES_H_
+
+/*******************************************************************************
+ *                                Enums                                        *
+ *******************************************************************************/
+/*
+ * this enum serves the 3 voltage types of the ADC which is AREF , AVCC and INTERNAL 2.56 V
+ * the user initialize the INIT function by one of them to choose the voltage that will be
+ * used with the ADC
+ */
+
+typedef enum {
+	AREF , AVCC=0x40 , INTERNAL =0xC0
+}Vref_Bits;
+
+
+/*
+ * this enum is for the ADC prescalers that you can choose from the data sheet
+ */
+
+typedef enum {
+	F_cpu_2 = 1 , F_cpu_4 , F_cpu_8 , F_cpu_16 , F_cpu_32 , F_cpu_64 , F_cpu_128
+}F_ADC;
+
+
+/*
+ * this enum is to set or clear the ADC enable pin
+ * if you want the ADC to stop send DISABLE on the state pin
+ */
+
+typedef enum {
+	DISABLE , ENABLE
+}Status;
+
+/*******************************************************************************
+ *                                       structs                               *
+ *******************************************************************************/
+
+/*
+ * this is the initialization struct that is filled by the user and sent to the INIT
+ * function to set the configurations of the ADC
+ */
+
+typedef struct
+{
+	Vref_Bits volt;
+	F_ADC freq;
+	Status state;
+}ADC_Initialization;
+
+
+#endif /* ADC_TYPES_H_ */

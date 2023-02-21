@@ -1,0 +1,73 @@
+/*
+ * adc.c
+ *
+ *  Created on: 4 Oct 2022
+ *      Author: Mekawy
+ *      ADC using polling method and not quite configurable
+ */
+
+#include "common_macros.h"
+#include <avr/io.h>
+#include "std_types.h"
+#include "adc.h"
+
+void ADC_init (ADC_Initialization *data)
+{
+	/*
+	 * reference voltage is adjusted by the bits 6,7
+	 * REFS1 REFS0
+	 * ADLAR   = 0 right adjusted
+	 *
+	 * Bits 4:0 – MUX4:0: Analog Channel and Gain Selection Bits
+	 * choose 0000 as initialization
+	 * so all bits are zeros except the first 2 bits
+	 */
+	ADMUX = data->volt;
+
+
+
+	/*
+	 * Enable ADC -> Bit 7 – ADEN: ADC Enable in ADCSRA
+	 * set the  Bits 2:0 – ADPS2:0: ADC Prescaler Select Bits
+	 * first I will set the prescaler and let all other values =0
+	 * then I will OR the register with the ENABLE
+	 */
+
+	ADCSRA = data->freq;
+	ADCSRA |=(data->state << ADEN );
+}
+
+uint16 ADC_readChannel(uint8 ch_num)
+{
+	/*
+	 * if I want say channel 1
+	 * make the last 5 bits =0 , leave first 3 unchanged (anded with 1)
+	 * And the channel num with 0x07 to clear all its bits except the last 3 bits
+	 * then OR the channel num i got with the register ADMUX
+	 * */
+
+	ADMUX = (ADMUX & 0xE0) | (ch_num & 0x07);
+
+	/* Bit 6 – ADSC: ADC Start Conversion */
+	SET_BIT(ADCSRA,ADSC);
+
+	/* loop until end of conversion
+	 * check • Bit 4 – ADIF: ADC Interrupt Flag is 0
+	 * leave the loop when its HIGH */
+
+	while (BIT_IS_CLEAR(ADCSRA,ADIF))
+	{
+		/*wait for conversion */
+	}
+
+	/* Clear ADIF by write '1' to it :) */
+	SET_BIT(ADCSRA,ADIF);
+
+	return ADC;
+
+}
+void ADC_DeInit()
+{
+	ADMUX=0;
+	ADCSRA=0;
+}

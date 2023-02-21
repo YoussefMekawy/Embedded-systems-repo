@@ -1,0 +1,44 @@
+/*
+ * main.c
+ *
+ *  Created on: 4 Oct 2022
+ *      Author:Mekawy
+ *      test LM35
+ */
+
+#include <avr/interrupt.h>
+#include "adc.h"
+#include "lcd.h"
+#include "lm35.h"
+#include <avr/io.h>
+
+
+int main(void)
+{
+	uint16 temp;
+
+	SREG |= (1<<7);/* Enable Global Interrupts */
+
+	LCD_init(); /* initialize LCD driver */
+	ADC_init(); /* initialize ADC driver */
+
+	/* Display this string "Temp =   C" only once on LCD at the first row */
+	LCD_string_Display("Temp =    C");
+	while(1)
+	{
+		temp = LM35_GetTemperature();
+
+		/* Display the temperature value every time at same position */
+		LCD_moveCursor(0,7);
+		if(temp >= 100)
+		{
+			LCD_intgerToString(temp);
+		}
+		else
+		{
+			LCD_intgerToString(temp);
+			/* In case the digital value is two or one digits print space in the next digit place */
+			LCD_display_Character(' ');
+		}
+	}
+}

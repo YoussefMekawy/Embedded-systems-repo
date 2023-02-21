@@ -1,0 +1,31 @@
+13:31:17 **** Incremental Build of configuration Debug for project test_gpio ****
+make all 
+Building file: ../gpio.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=1000000UL -MMD -MP -MF"gpio.d" -MT"gpio.o" -c -o "gpio.o" "../gpio.c"
+Finished building: ../gpio.c
+ 
+Building target: test_gpio.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,test_gpio.map -mmcu=atmega32 -o "test_gpio.elf"  ./gpio.o ./main.o   
+Finished building target: test_gpio.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S test_gpio.elf  >"test_gpio.lss"
+Finished building: test_gpio.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 test_gpio.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:    5694 bytes (17.4% Full)
+(.text + .data + .bootloader)
+
+Data:          8 bytes (0.4% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

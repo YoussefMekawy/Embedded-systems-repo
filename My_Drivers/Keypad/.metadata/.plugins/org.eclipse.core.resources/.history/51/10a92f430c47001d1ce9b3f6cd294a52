@@ -1,0 +1,15 @@
+/*
+ * keypad.c
+ *
+ *  Created on: 8 Oct 2022
+ *      Author: hp
+ */
+#include "keypad.h"
+#include "gpio.h"
+
+
+uint8 KEYPAD_getPressedKey(void)
+{
+	uint8 col,row;
+
+}

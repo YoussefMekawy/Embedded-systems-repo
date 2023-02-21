@@ -1,0 +1,110 @@
+/*
+ * lcd.c
+ *
+ *  Created on: 1 Oct 2022
+ *      Author: hp
+ */
+
+/*-------------------------------------------------------------------------*/
+/*-------------------------------INCLUDES----------------------------------*/
+/*-------------------------------------------------------------------------*/
+
+#include "lcd.h"
+#include "gpio.h"
+#include <util/delay.h>
+#include "common_macros.h" /* For GET_BIT Macro */
+
+/*-------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------*/
+/*-------------------------FUNCTION DEFINITIONS----------------------------*/
+/*-------------------------------------------------------------------------*/
+void LCD_SendCommand (uint8 command)
+{
+	//RS=0
+	GPIO_writePin(LCD_RS_PORT_ID, LCD_RS_PIN_ID, LOGIC_LOW);
+
+	//delay 1u
+	_delay_ms(1);
+
+	//enable =1
+	GPIO_writePin(LCD_E_PORT_ID, LCD_E_PIN_ID, LOGIC_HIGH);
+
+	//delay 1u
+	_delay_ms(1);
+
+	//send command
+	GPIO_writePort(LCD_DATA_PORT_ID, command);
+
+	//delay 1u
+	_delay_ms(1);
+
+	//enable =0
+	GPIO_writePin(LCD_E_PORT_ID, LCD_E_PIN_ID, LOGIC_LOW);
+
+	//delay 1u
+	_delay_ms(1);
+
+}
+
+void LCD_display_Character (uint8 character)
+{
+	//RS=1
+	GPIO_writePin(PORTD_ID, PIN4_ID, LOGIC_HIGH);
+
+	//delay 1u
+	_delay_ms(1);
+
+	//enable =1
+	GPIO_writePin(PORTD_ID, PIN5_ID, LOGIC_HIGH);
+
+	//delay 1u
+	_delay_ms(1);
+
+	//send command
+	GPIO_writePort(PORTC_ID, character);
+
+	//delay 1u
+	_delay_ms(1);
+
+	//enable =0
+	GPIO_writePin(PORTD_ID, PIN5_ID, LOGIC_LOW);
+
+	//delay 1u
+	_delay_ms(1);
+
+}
+
+void LCD_init (void)
+{
+	//RS & Enable output pins
+	GPIO_setupPinDirection(PORTD_ID, PIN4_ID, PIN_OUTPUT);
+	GPIO_setupPinDirection(PORTD_ID, PIN5_ID, PIN_OUTPUT);
+
+	//DB output
+	GPIO_setupPortDirection(PORTC_ID, PORT_OUTPUT);
+
+	//delay 20u
+	_delay_ms(20);
+
+	//send command 2 lines
+	LCD_SendCommand(0x38);
+
+	//send command cursor off
+	LCD_SendCommand(0x0c);
+
+	//clear screen
+	LCD_SendCommand(0x01);
+}
+
+void LCD_string_Display (uint8 * str_ptr)
+{
+	while (*(str_ptr) != '\0')
+	{
+		LCD_display_Character(*str_ptr);
+		str_ptr++;
+	}
+}
+

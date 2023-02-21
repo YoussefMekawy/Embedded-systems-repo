@@ -1,0 +1,35 @@
+17:31:49 **** Incremental Build of configuration Debug for project mini_project_3 ****
+make all 
+Building file: ../pwm.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=1000000UL -MMD -MP -MF"pwm.d" -MT"pwm.o" -c -o "pwm.o" "../pwm.c"
+Finished building: ../pwm.c
+ 
+Building target: mini_project_3.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,mini_project_3.map -mmcu=atmega32 -o "mini_project_3.elf"  ./adc.o ./dc_motor.o ./gpio.o ./lcd.o ./lm35.o ./main.o ./pwm.o   
+Finished building target: mini_project_3.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S mini_project_3.elf  >"mini_project_3.lss"
+Finished building: mini_project_3.lss
+ 
+Create Flash image (ihex format)
+avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex mini_project_3.elf  "mini_project_3.hex"
+Finished building: mini_project_3.hex
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 mini_project_3.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:    9494 bytes (29.0% Full)
+(.text + .data + .bootloader)
+
+Data:        303 bytes (14.8% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

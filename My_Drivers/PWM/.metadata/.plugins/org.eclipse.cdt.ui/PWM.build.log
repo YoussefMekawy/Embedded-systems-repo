@@ -1,0 +1,34 @@
+19:55:07 **** Incremental Build of configuration Debug for project PWM ****
+make all 
+Building file: ../pwm.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=1000000UL -MMD -MP -MF"pwm.d" -MT"pwm.o" -c -o "pwm.o" "../pwm.c"
+Finished building: ../pwm.c
+ 
+Building target: PWM.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,PWM.map -mmcu=atmega32 -o "PWM.elf"  ./dc_motor.o ./gpio.o ./main.o ./pwm.o   
+Finished building target: PWM.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S PWM.elf  >"PWM.lss"
+Finished building: PWM.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 PWM.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:    5326 bytes (16.3% Full)
+(.text + .data + .bootloader)
+
+Data:        264 bytes (12.9% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+19:55:09 Build Finished. 0 errors, 0 warnings. (took 1s.636ms)
+

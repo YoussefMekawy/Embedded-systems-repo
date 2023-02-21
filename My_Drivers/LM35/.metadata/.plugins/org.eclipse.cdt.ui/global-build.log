@@ -1,0 +1,21 @@
+14:40:53 **** Incremental Build of configuration Debug for project test_LM35 ****
+make all 
+Create Flash image (ihex format)
+avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex test_LM35.elf  "test_LM35.hex"
+Finished building: test_LM35.hex
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 test_LM35.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:    8970 bytes (27.4% Full)
+(.text + .data + .bootloader)
+
+Data:        280 bytes (13.7% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

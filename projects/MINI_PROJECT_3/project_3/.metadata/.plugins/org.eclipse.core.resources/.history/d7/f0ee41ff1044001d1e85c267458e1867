@@ -1,0 +1,19 @@
+/*
+ * main.c
+ *
+ *  Created on: 4 Oct 2022
+ *      Author: hp
+ */
+
+#include "adc.h"
+#include "dc_motor.h"
+
+int main (void)
+{
+	ADC_Initialization data = {AREF , F_cpu_8 , ENABLE} ;
+	LCD_init();
+	ADC_init(*data);
+	DcMotor_Init();
+
+
+}

@@ -1,0 +1,45 @@
+/*
+ * adc.c
+ *
+ *  Created on: 1 Oct 2022
+ *      Author: hp
+ */
+
+#include "common_macros.h"
+#include <avr/io.h>
+#include "std_types.h"
+
+void ADC_init ()
+{
+	/*voltage*/
+	SET_BIT(ADMUX , REFS0);
+
+	/*enable*/
+	SET_BIT(ADCSRA ,ADEN);
+
+	/* prescalar */
+	SET_BIT(ADCSRA ,ADTS0);
+	SET_BIT(ADCSRA ,ADTS1);
+	SET_BIT(ADCSRA ,ADTS2);
+}
+
+uint16 ADC_readChannel(uint8 ch_num)
+{
+	/* insert channel num*/
+	/*this should be configurable to choose any other pin */
+	ADMUX &= 0xE0;
+
+	/*start conversion*/
+	SET_BIT(ADCSRA , ADSC);
+
+	while (BIT_IS_CLEAR(ADCSRA,ADIF))
+	{
+		/*wait*/
+	}
+
+	/* clear the flag*/
+	SET_BIT(ADCSRA,ADIF);
+
+	/*read data*/
+	return ADC ;
+}

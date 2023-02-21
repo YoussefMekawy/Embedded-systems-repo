@@ -1,0 +1,86 @@
+/*
+ * main.c
+ *
+ *  Created on: 4 Oct 2022
+ *      Author: hp
+ */
+
+#include "adc.h"
+#include "dc_motor.h"
+#include "lcd.h"
+#include "lm35.h"
+
+
+uint8 g_temp=0;
+
+void display_state (void);
+
+int main (void)
+{
+	ADC_Initialization data = {INTERNAL , F_cpu_8 , ENABLE} ;
+	LCD_init();
+	ADC_init(&data);
+	DcMotor_Init();
+
+
+	while(1)
+	{
+		/*
+		 * keda m3aya temp
+		 */
+
+		g_temp = LM35_GetTemperature();
+
+		if (g_temp <= 30)
+		{
+			//off
+			DCMotor_Rotate(CW, 0);
+			LCD_displayStringRowColumn(0, 4, "Fan is OFF ");
+			LCD_displayStringRowColumn(1, 4, "Temp=   C");
+			LCD_moveCursor(1, 10);
+			LCD_intgerToString(g_temp);
+
+
+		}
+		else if (g_temp >= 30 )
+		{
+			//25%
+			DCMotor_Rotate(CW, 25);
+			display_state();
+			LCD_string_Display("manga mango 1");
+
+		}
+		else if (g_temp >= 60)
+		{
+			//50%
+			DCMotor_Rotate(CW, 50);
+			display_state();
+			LCD_string_Display("manga mango 2");
+		}
+		else if (g_temp >=90)
+		{
+			//75%
+			DCMotor_Rotate(CW, 75);
+			display_state();
+			LCD_string_Display("manga mango 3");
+		}
+		else
+		{
+			//100%
+			DCMotor_Rotate(CW, 100);
+			display_state();
+			LCD_string_Display("manga mango 4");
+		}
+
+	}
+
+}
+
+void display_state (void)
+{
+	LCD_displayStringRowColumn(0, 4, "Fan is ON ");
+	LCD_displayStringRowColumn(1, 4, "Temp=   C");
+	LCD_moveCursor(1, 10);
+	LCD_intgerToString(g_temp);
+}
+

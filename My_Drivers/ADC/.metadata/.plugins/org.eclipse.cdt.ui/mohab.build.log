@@ -1,0 +1,24 @@
+20:22:38 **** Incremental Build of configuration Debug for project mohab ****
+make all 
+Create Flash image (ihex format)
+avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex mohab.elf  "mohab.hex"
+Finished building: mohab.hex
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 mohab.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   10344 bytes (31.6% Full)
+(.text + .data + .bootloader)
+
+Data:         26 bytes (1.3% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+20:22:38 Build Finished. 0 errors, 0 warnings. (took 368ms)
+

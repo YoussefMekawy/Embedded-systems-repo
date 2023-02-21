@@ -1,0 +1,218 @@
+/*
+ * CONTROL_ECU_main.c
+ *
+ *  Created on: 31 Oct 2022
+ *      Author: hp
+ */
+/*******************************************************************************
+ * 								Includes
+ *******************************************************************************/
+
+#include "usart.h"
+#include "timer1.h"
+#include <avr/io.h>
+#include <util/delay.h>
+#include "gpio.h"
+#include "buzzer.h"
+#include "dc_motor.h"
+#include "external_eeprom.h"
+#include "pwm.h"
+#include "twi.h"
+#include <string.h>
+
+/*******************************************************************************
+ * 								Definitions
+ *******************************************************************************/
+#define password_address_eeprom 		0x0311
+#define Matched_Passwords 		1
+#define Unmatched_Passwords 	0
+
+#define Open_Door 			43
+#define Change_Pass 		45
+
+#define rotate_motor		5
+#define active_buzzer		15
+/*******************************************************************************
+ * 								Global variables
+ *******************************************************************************/
+
+USART_INITIALIZATION usart_data_init = { PARITY_DISABLED , ONE_STOP_BIT , BIT_8 , 9600};
+Timer1_ConfigType timer1_data_init = { 0 , 976, F_CPU_1024 ,Compare };
+TWI_ConfigType twi_data_init = {0x01 , F_400};
+
+uint8 g_password[6]={0} ;
+uint8 g_password_2[6]={0};
+uint8 g_password_3[6]={0};
+uint8 mismatch_in_change_password=0;
+
+
+g_tick=0;
+/*******************************************************************************
+ * 								function prototypes
+ *******************************************************************************/
+void set_change_password(void);
+void open_door_decision(void);
+void check_user_password(void);
+void door_lock_unlock(void);
+void count_the_time (void);
+void activate_buzzer_fun(void);
+
+/*******************************************************************************/
+
+int main (void)
+{
+	uint8 Mode_of_main_menu;
+	//SREG |= (1<<7);
+
+	/* initialize the drivers */
+	Buzzer_init();
+	DcMotor_Init();
+	UART_init(&usart_data_init);
+	TWI_init(&twi_data_init);
+	/* wait for the HUMAN_ECU to send the passwords */
+	set_change_password();
+
+	while(1)
+	{
+
+		/* I am either waiting for a verification for open door or change password*/
+		Mode_of_main_menu= UART_recieveByte();
+
+		/* from this variable i know whether i will receive 1 string or 2
+		 * according to the function (open door) or (change password)*/
+		if (Mode_of_main_menu == Open_Door)
+		{
+			open_door_decision();
+		}
+		else if (Mode_of_main_menu == Change_Pass)
+		{
+			check_user_password();
+
+			if (mismatch_in_change_password==0)
+			{
+				set_change_password();
+			}
+			else
+			{
+				mismatch_in_change_password=0;
+			}
+		}
+		else if (Mode_of_main_menu == rotate_motor)
+		{
+			door_lock_unlock();
+		}
+		else if (Mode_of_main_menu == active_buzzer)
+		{
+			activate_buzzer_fun();
+		}
+	}
+
+
+}
+
+/*******************************************************************************
+ * 								function definitions
+ *******************************************************************************/
+void set_change_password(void)
+{
+	UART_receiveString(g_password);
+
+	UART_receiveString(g_password_2);
+
+	if (strcmp(g_password , g_password_2) == 0 )
+	{
+		/* the user typed the passwords correct */
+		uint8 i;
+		for (i=0 ; i<6 ; i++)
+		{
+			/* saved inside the eeprom the password as 12345# */
+			EEPROM_writeByte(password_address_eeprom + i, g_password[i]);
+			_delay_ms(100);
+		}
+
+		/* send to HMU_ECU a matched signal */
+		UART_sendByte(Matched_Passwords);
+
+	}
+	else if (strcmp(g_password , g_password_2) != 0 )
+	{
+		/* there is a mismatch between the passwords */
+		/* send to HMU_ECU a mis-match signal */
+		UART_sendByte(Unmatched_Passwords);
+	}
+}
+
+void open_door_decision(void)
+{
+	check_user_password();
+}
+
+void check_user_password(void)
+{
+	/* receive the password sent by the user and store it in g_password */
+	UART_receiveString(g_password);
+
+	/* get the value of the password from the eeprom */
+	uint8 i ;
+	for (i=0 ; i<6 ; i++)
+	{
+		/* store the value of the eeprom password in g_password_3*/
+		EEPROM_readByte(password_address_eeprom + i , &g_password_3[i]);
+		_delay_ms(100);
+	}
+
+	if (strcmp(g_password , g_password_3) == 0 )
+	{
+		/* password match*/
+		UART_sendByte(Matched_Passwords);
+		_delay_ms(100);
+	}
+	else if (strcmp(g_password , g_password_3) != 0 )
+	{
+		/* password mismatch */
+		UART_sendByte(Unmatched_Passwords);
+		_delay_ms(100);
+		//flag eno ghalat w acheck alah henak fl
+		//else if (Mode_of_main_menu == Change_Pass)
+		mismatch_in_change_password=1;
+
+	}
+}
+void count_the_time (void)
+{
+	g_tick++;
+}
+
+void door_lock_unlock(void)
+{
+	Timer1_init(&timer1_data_init);
+	Timer1_setCallBack(count_the_time);
+	/* run the motor for 15 sec*/
+	DCMotor_Rotate(CW, 100);
+	while (g_tick < 15){};
+	g_tick=0;
+
+	/*hold for 3 sec */
+	DCMotor_Rotate(CW, 0);
+	while (g_tick<3){};
+	g_tick=0;
+
+	/*rotate motor 15 sec anti CW */
+	DCMotor_Rotate(A_CW, 100);
+	while (g_tick<15){};
+	g_tick=0;
+	DCMotor_Rotate(CW, 0);
+
+	Timer1_deInit();
+}
+
+void activate_buzzer_fun(void)
+{
+	Timer1_init(&timer1_data_init);
+	Timer1_setCallBack(count_the_time);
+	Buzzer_on();
+	while(g_tick < 60){};
+	Buzzer_off();
+	g_tick=0;
+}
+

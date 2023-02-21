@@ -1,0 +1,17 @@
+00:11:17 **** Incremental Build of configuration Debug for project USART_test ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 USART_test.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:    2474 bytes (7.6% Full)
+(.text + .data + .bootloader)
+
+Data:          8 bytes (0.4% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

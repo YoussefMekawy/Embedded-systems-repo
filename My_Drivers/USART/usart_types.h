@@ -1,0 +1,57 @@
+/*
+ * usart_types.h
+ *
+ *  Created on: 9 Oct 2022
+ *      Author: Mekawy
+ */
+
+#ifndef USART_TYPES_H_
+#define USART_TYPES_H_
+
+/*******************************************************************************
+ *                                Enums                                        *
+ *******************************************************************************/
+
+/*
+ * this enum allow me to set the parity used for the usart either even or odd or disabled
+ */
+
+typedef enum {
+	PARITY_DISABLED=0 , EVEN_PARITY = 0x20 , ODD_PARITY = 0x30
+}parity_mode;
+
+/*
+ * this enum let me set the stop bits either 1 bit or 2 bits
+ */
+typedef enum {
+	ONE_STOP_BIT = 0 , TWO_STOP_BITS = 0x08
+}stop_bit;
+
+
+/*
+ * this enum let me set the number of bits per frame
+ */
+
+typedef enum {
+	BIT_5 = 0 , BIT_6 = 0x02 , BIT_7 = 0x04 , BIT_8 = 0x06
+}char_size;
+
+
+/*******************************************************************************
+ *                                       structs                               *
+ *******************************************************************************/
+
+/*
+ * this struct is the configuration that will initialize the usart
+ */
+
+typedef struct
+{
+	parity_mode parity;
+	stop_bit stop_bits;
+	char_size num_bits;
+	uint32 baud_rate;
+
+}USART_INITIALIZATION;
+
+#endif /* USART_TYPES_H_ */

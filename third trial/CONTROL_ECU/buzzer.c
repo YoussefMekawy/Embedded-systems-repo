@@ -1,0 +1,31 @@
+/*
+ * buzzer.c
+ *
+ *  Created on: 30 Oct 2022
+ *      Author: hp
+ */
+/*******************************************************************************
+ *            				includes
+ ******************************************************************************/
+
+#include "buzzer.h"
+
+/*******************************************************************************
+ * 						Function definitions
+ *******************************************************************************/
+
+void Buzzer_init()
+{
+	GPIO_setupPinDirection(Buzzer_Port_Id, Buzzer_Pin_Id, PIN_OUTPUT);
+	GPIO_writePin(Buzzer_Port_Id, Buzzer_Pin_Id, LOGIC_LOW);
+}
+
+void Buzzer_on(void)
+{
+	GPIO_writePin(Buzzer_Port_Id, Buzzer_Pin_Id, LOGIC_HIGH);
+}
+
+void Buzzer_off(void)
+{
+	GPIO_writePin(Buzzer_Port_Id, Buzzer_Pin_Id, LOGIC_LOW);
+}

@@ -1,0 +1,17 @@
+/*
+ * adc.h
+ *
+ *  Created on: 1 Oct 2022
+ *      Author: hp
+ */
+
+#ifndef ADC_H_
+#define ADC_H_
+
+#include "std_types.h"
+
+void ADC_init ();
+
+uint16 ADC_readChannel (uint8 channel_number);
+
+#endif /* ADC_H_ */

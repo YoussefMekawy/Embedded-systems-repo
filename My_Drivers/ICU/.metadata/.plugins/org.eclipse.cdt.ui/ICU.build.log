@@ -1,0 +1,24 @@
+20:02:06 **** Incremental Build of configuration Debug for project ICU ****
+make all 
+Create Flash image (ihex format)
+avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex ICU.elf  "ICU.hex"
+Finished building: ICU.hex
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 ICU.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   11850 bytes (36.2% Full)
+(.text + .data + .bootloader)
+
+Data:        281 bytes (13.7% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+20:02:07 Build Finished. 0 errors, 0 warnings. (took 361ms)
+

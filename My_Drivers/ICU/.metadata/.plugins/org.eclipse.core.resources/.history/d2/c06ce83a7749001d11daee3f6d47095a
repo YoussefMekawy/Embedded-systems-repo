@@ -1,0 +1,58 @@
+/*
+ * icu.c
+ *
+ *  Created on: 11 Oct 2022
+ *      Author: hp
+ */
+#include "icu.h"
+#include <avr/io.h>
+#include "common_macros.h"
+#include "gpio.h"
+//#include <avr/interrupt.h>
+
+
+void Icu_init( icu_CONFIG * Config_Ptr)
+{
+	/*
+	 * set pin as output
+	 */
+	GPIO_setupPinDirection(PORTD_ID, PIN6_ID, PIN_INPUT);
+
+	/*
+	 * non PWM
+	 */
+	TCCR1A = (1<<FOC1A) | (1<<FOC1B);
+
+
+	/*
+	 * set the edge type
+	 * Bit 6 – ICES1: Input Capture Edge Select
+	 */
+	TCCR1B =(Config_Ptr->edge);
+
+	/*
+	 * set the clock prescaler
+	 */
+	TCCR1B = (TCCR1B & 0xF8) |Config_Ptr->prescaler ;
+
+	/*
+	 * set initial count = 0
+	 */
+	TCNT1=0;
+
+	/*
+	 *  set the value of ICR1 = 0
+	 */
+	ICR1=0;
+
+	/*
+	 *Bit 5 – TICIE1: Timer/Counter1, Input Capture Interrupt Enable
+	 */
+	TIMSK |= (1<<TICIE1);
+
+
+
+
+
+
+}

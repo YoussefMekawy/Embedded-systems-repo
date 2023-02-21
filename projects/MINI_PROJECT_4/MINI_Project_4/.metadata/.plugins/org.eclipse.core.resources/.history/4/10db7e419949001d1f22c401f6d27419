@@ -1,0 +1,33 @@
+/*
+ * main.c
+ *
+ *  Created on: 11 Oct 2022
+ *      Author: hp
+ */
+
+#include "ultrasonic.h"
+#include "common_macros.h"
+#include "lcd.h"
+#include <avr/interrupt.h>
+
+uint16 g_distance =0;
+
+int main(void)
+{
+	/*
+	 * enable I-Bit
+	 */
+	SREG |= (1<<7);
+
+	LCD_init();
+	LCD_string_Display("Distance=");
+	LCD_moveCursor(0, 9);
+
+	while (1)
+	{
+		g_distance = Ultrasonic_readDistance;
+
+		LCD_intgerToString(g_distance);
+	}
+
+}

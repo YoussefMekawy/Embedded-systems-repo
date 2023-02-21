@@ -1,0 +1,15 @@
+/*
+ * dc_motor.c
+ *
+ *  Created on: 4 Oct 2022
+ *      Author: hp
+ */
+
+#include "dc_motor.h"
+#include "std_types.h"
+#include "gpio.h"
+
+void DcMotor_Init(void)
+{
+
+}

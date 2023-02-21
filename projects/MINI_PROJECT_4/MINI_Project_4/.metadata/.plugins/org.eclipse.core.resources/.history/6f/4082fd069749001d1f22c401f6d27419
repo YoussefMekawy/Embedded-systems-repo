@@ -1,0 +1,26 @@
+/*
+ * ultrasonic.c
+ *
+ *  Created on: 11 Oct 2022
+ *      Author: Mekawy
+ */
+
+#include "ultrasonic.h"
+#include "gpio.h"
+#include "icu.h"
+
+
+void Ultrasonic_init(void)
+{
+	/*
+	 * Initialize the ICU driver as required.
+	 */
+	icu_CONFIG data = {RISING , F_CPU_8};
+	Icu_init(&data);
+
+	/*
+	 * Setup the ICU call back function.
+	 */
+
+}
+

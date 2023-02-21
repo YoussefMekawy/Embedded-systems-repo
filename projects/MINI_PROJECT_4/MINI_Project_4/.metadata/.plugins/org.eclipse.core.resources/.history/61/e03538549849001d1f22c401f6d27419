@@ -1,0 +1,41 @@
+/*
+ * ultrasonic.c
+ *
+ *  Created on: 11 Oct 2022
+ *      Author: Mekawy
+ */
+
+#include "ultrasonic.h"
+#include "gpio.h"
+#include "icu.h"
+
+
+void Ultrasonic_init(void)
+{
+	/*
+	 * Initialize the ICU driver as required.
+	 */
+	icu_CONFIG data = {RISING , F_CPU_8};
+	Icu_init(&data);
+
+	/*
+	 * Setup the ICU call back function.
+	 */
+	Icu_setCallBack(Ultrasonic_edgeProcessing);
+
+	/*
+	 * Setup the direction for the trigger pin as output pin through the GPIO driver.
+	 */
+	GPIO_setupPinDirection(Trigger_PORT_ID	, Trigger_PIN_ID, PIN_OUTPUT);
+
+}
+
+void Ultrasonic_Trigger(void)
+{
+
+}
+
+void Ultrasonic_edgeProcessing(void)
+{
+
+}

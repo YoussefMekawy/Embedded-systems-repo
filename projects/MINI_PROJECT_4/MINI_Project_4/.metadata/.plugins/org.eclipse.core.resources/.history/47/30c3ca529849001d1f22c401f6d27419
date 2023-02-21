@@ -1,0 +1,24 @@
+/*
+ * main.c
+ *
+ *  Created on: 11 Oct 2022
+ *      Author: hp
+ */
+
+#include "ultrasonic.h"
+#include "common_macros.h"
+#include "lcd.h"
+#include <avr/interrupt.h>
+
+
+int main(void)
+{
+	/*
+	 * enable I-Bit
+	 */
+	SREG |= (1<<7);
+
+	LCD_init();
+
+
+}

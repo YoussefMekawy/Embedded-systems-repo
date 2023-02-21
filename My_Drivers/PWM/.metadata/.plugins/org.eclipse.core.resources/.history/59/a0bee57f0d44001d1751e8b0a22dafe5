@@ -1,0 +1,17 @@
+/*
+ * pwm.c
+ *
+ *  Created on: 4 Oct 2022
+ *      Author: hp
+ */
+
+#include "pwm.h"
+#include "std_types.h"
+#include "gpio.h"
+#include <avr/io.h>
+
+
+void PWM_Timer0_Init(uint8 speed)
+{
+
+}
